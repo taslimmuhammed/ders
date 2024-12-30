@@ -48,7 +48,7 @@ function AlertTable({ heading, subHeading, alerts }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {alerts.map((alert) => (
+                        {alerts && alerts.map((alert) => (
                             <TableRow
                                 key={alert.id}
                                 className="cursor-pointer hover:bg-muted/50"

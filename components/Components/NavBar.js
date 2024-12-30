@@ -32,14 +32,14 @@ const Navbar = () => {
                 <div className="flex h-16 items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center">
-                        <span className="text-xl font-bold">Logo</span>
+                        <Link href="/"><span className="text-xl font-bold">DERS</span></Link>
                     </div>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-8">
 
                         <Link href="/alerts"><Button variant="ghost">Alerts</Button></Link>
-                        <Link href="/contracts"><Button variant="ghost">Contract</Button></Link>
+                        <Link href="/contracts"><Button variant="ghost">Contracts</Button></Link>
                         <Link href="/register"><Button variant="ghost">Register</Button></Link>
                         <Link href="/profile"><Button variant="ghost">Profile</Button></Link>
                         {/* Desktop Select */}
@@ -65,8 +65,6 @@ const Navbar = () => {
                                     <Link href="/contracts"><Button variant="ghost">Contract</Button></Link>
                                     <Link href="/register"><Button variant="ghost">Register</Button></Link>
                                     <Link href="/profile"><Button variant="ghost">Profile</Button></Link>
-                                    {/* <SelectProduct /> */}
-                                    {/* <Button variant="default">Sign In</Button> */}
                                     <ConnectWallet/>
                                 </div>
                             </SheetContent>

@@ -77,7 +77,7 @@ export default function Ethers({ children }) {
                 support,
                 { value: stringToBigInt(stakeAmount.toString()) }
             );
-            const receipt = await tx.wait();
+            await tx.wait();
             toast.success("Vote submitted successfully");
             window.location.reload()
         } catch (error) {
@@ -234,9 +234,64 @@ export default function Ethers({ children }) {
             console.log(error);
         }
     };
+    async function switchToAmoyTestnet() {
+        // Polygon Amoy Testnet Chain ID in hex and decimal
+        const amoyChainIdHex = '0x13882'
 
+        // Chain parameters
+        const amoyParams = {
+            chainId: amoyChainIdHex,
+            chainName: 'Polygon Amoy Testnet',
+            nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18
+            },
+            rpcUrls: ['rpc-amoy.polygon.technology'],
+            blockExplorerUrls: ['www.oklink.com/amoy']
+        }
+
+        try {
+            // Check current network
+            const currentChainId = await window.ethereum.request({
+                method: 'eth_chainId'
+            })
+
+            // If already on Amoy, return early
+            if (currentChainId === amoyChainIdHex) {
+                console.log('Already connected to Amoy testnet')
+                return
+            }
+
+            // If not on Amoy, try to switch
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: amoyChainIdHex }],
+                })
+            } catch (switchError) {
+                // If the error code is 4902, the chain hasn't been added yet
+                if (switchError.code === 4902) {
+                    try {
+                        // Add the network
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [amoyParams],
+                        })
+                    } catch (addError) {
+                        throw new Error(`Failed to add Amoy network: ${addError.message}`)
+                    }
+                } else {
+                    throw new Error(`Failed to switch to Amoy network: ${switchError.message}`)
+                }
+            }
+        } catch (error) {
+            throw new Error(`Error handling network switch: ${error.message}`)
+        }
+    }
     useEffect(() => {
         checkIfWalletIsConnect();
+        switchToAmoyTestnet();
         getContract()
     }, []);
     return (

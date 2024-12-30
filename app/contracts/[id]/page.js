@@ -8,14 +8,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -47,13 +39,14 @@ const ContractPage = ({ params }) => {
             const targetContract = contractDetails[id];
             console.log({ targetContract });
             setContract(targetContract);
-            targetContract.alerts.map(async (alert) => {
+            if (targetContract.alerts) targetContract.alerts.map(async (alert) => {
                 const data = await BlockFunctions.getAlertDataWithoutIPFS(alert)
                 console.log(data);
                 if (data) setAlerts([data, ...alerts])
             })
-            targetContract.resolvedAlerts.map(async (alert) => {
+            if (targetContract.resolvedAlerts) targetContract.resolvedAlerts.map(async (alert) => {
                 const data = await BlockFunctions.getAlertDataWithoutIPFS(alert)
+                console.log({data})
                 if (data) setResolvedAlerts([data, ...resolvedAlerts])
             })
         } catch (err) {

@@ -12,8 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { EthersContext } from '@/context/EthersContext';
 import { BlockFunctions } from '@/utils/BlockFunctions';
 import CreateAlertModal from '@/components/Components/CreateAlertModal';
-import AlertTable from '@/components/Components/AlertTable';
-import OwnerAlertTable from '@/components/Components/OwnerAlerttable';
+import OwnerAlertTable from '@/components/Components/OwnerAlertTable';
 
 const ContractStatusMap = {
     0: "Unregistered",
@@ -38,18 +37,17 @@ const ContractPage = ({ params }) => {
             const targetContract = contractDetails[id];
             console.log({ targetContract });
             setContract(targetContract);
-            targetContract.alerts.map(async (alert) => {
+            if (targetContract.alerts) targetContract.alerts.map(async (alert) => {
                 const data = await BlockFunctions.getAlertDataWithoutIPFS(alert)
                 console.log(data);
                 if (data) setAlerts([data, ...alerts])
             })
-            targetContract.validatedAlert.map(async (alert) => {
+            if (targetContract.resolvedAlerts) targetContract.resolvedAlerts.map(async (alert) => {
                 const data = await BlockFunctions.getAlertDataWithoutIPFS(alert)
                 if (data) setValidatedAlert([data, ...validatedAlert])
             })
         } catch (err) {
-            setError('Failed to fetch contract details');
-            console.error(err);
+            console.log(err);
         } finally {
             setIsLoading(false);
         }

@@ -630,7 +630,7 @@ contract DERS is ISeverityChecker {
         contractMapping[_contractId].aiPause=true;
     }
     function resolvedAiPuase(uint256 _contractId) external{
-        require(msg.sender==owner,"reserved for owner only");
+        require(msg.sender==contractMapping[_contractId].contractOwner,"reserved for contract owner only");
         contractMapping[_contractId].aiPause=false;
     }
 }
