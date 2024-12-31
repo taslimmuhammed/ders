@@ -293,7 +293,7 @@ export default function Ethers({ children }) {
         checkIfWalletIsConnect();
         switchToAmoyTestnet();
         getContract()
-    }, []);
+    }, [address]);
     return (
         <EthersContext.Provider
             value={{
