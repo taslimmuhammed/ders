@@ -33,6 +33,8 @@ export const BlockFunctions = {
     getWallet : async () => {
         try {
             const accounts = await ethereum.request({ method: "eth_accounts" });
+            console.log({ accounts });
+            
             const account = accounts[0];
             return account;
         } catch (e) {
@@ -144,11 +146,13 @@ export const BlockFunctions = {
     getAlertData: async(id)=>{
         try {
             const contract = BlockFunctions.getContract()
-            const wallet = BlockFunctions.getWallet()
+            const wallet = await BlockFunctions.getWallet()
+            console.log({wallet})
             const alert = await contract.getAlertDetails(id, wallet);
             let ipfsData = await BlockFunctions.storage.downloadJSON(alert.uri);
             let files = []
             ipfsData.files.map(uri=>files.push({uri,name:getFileNameFromURL(uri)}))
+
             return {
                 id: BigNoToInt(alert[0]),
                 contractId: BigNoToInt(alert[1]),
@@ -158,7 +162,7 @@ export const BlockFunctions = {
                 stake: BigNoToInt(alert[5]),
                 isHighPriority: alert[6],
                 votersCount: BigNoToInt(alert[7]),
-                voted: alert[8],
+                voted: alert.voted,
                 uri: alert[9],
                 minStake: "1",
                 description: ipfsData.descreption,
@@ -172,7 +176,7 @@ export const BlockFunctions = {
     getAlertDataWithoutIPFS: async (id) => {
         try {
             const contract = BlockFunctions.getContract()
-            const wallet = BlockFunctions.getWallet()
+            const wallet = await BlockFunctions.getWallet()
             const alert = await contract.getAlertDetails(id, wallet);
             const timestampMs = parseInt(alert[2]._hex, 16) * 1000
             const now = Date.now()
@@ -220,7 +224,7 @@ export const BlockFunctions = {
     getUserContracts:async()=>{
         try {
             const contract = BlockFunctions.getContract()
-            const wallet = BlockFunctions.getWallet()
+            const wallet = await BlockFunctions.getWallet()
             const contracts = await contract.getUserContracts(wallet);
             console.log(contracts);
             return contracts.map(data=>({
@@ -270,7 +274,7 @@ export const BlockFunctions = {
     getValidatorDetails: async () => {
         try {
             const contract = BlockFunctions.getContract()
-            const address = BlockFunctions.getWallet();
+            const address = await BlockFunctions.getWallet();
             const validator = await contract.validatorMapping(address);
             let time = BigNoToInt(validator.lastCreationTime) == 0 ? "Never" : BigIntToTimeDiff(validator.lastCreationTime)
             return {
@@ -352,7 +356,7 @@ export const BlockFunctions = {
     calculateAllRewardAndRank: async () => {
         try {
             const contract = BlockFunctions.getContract()
-            const address = BlockFunctions.getWallet()
+            const address = await BlockFunctions.getWallet()
             const [totalReward, totalRank] = await contract.calculateAllRewardAndRank(address);
             return {
                 rewards:BigNoToInt(totalReward),
@@ -366,7 +370,7 @@ export const BlockFunctions = {
     getUserUnClaimedList: async () => {
         try {
             const contract = BlockFunctions.getContract()
-            const address = BlockFunctions.getWallet()
+            const address = await BlockFunctions.getWallet()
             const list = await contract.getUserUnClaimedList(address);
             return list;
         } catch (error) {

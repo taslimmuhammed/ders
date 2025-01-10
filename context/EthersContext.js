@@ -291,7 +291,7 @@ export default function Ethers({ children }) {
     }
     useEffect(() => {
         checkIfWalletIsConnect();
-        switchToAmoyTestnet();
+        //switchToAmoyTestnet();
         getContract()
     }, [address]);
     return (
