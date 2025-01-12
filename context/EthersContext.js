@@ -236,18 +236,18 @@ export default function Ethers({ children }) {
     };
     async function switchToAmoyTestnet() {
         // Polygon Amoy Testnet Chain ID in hex and decimal
-        const amoyChainIdHex = '0x13882'
+        const amoyChainIdHex = '0xBA9304'
 
         // Chain parameters
         const amoyParams = {
             chainId: amoyChainIdHex,
-            chainName: 'Polygon Amoy Testnet',
+            chainName: 'NeoX Testnet',
             nativeCurrency: {
-                name: 'MATIC',
-                symbol: 'MATIC',
+                name: 'GAS',
+                symbol: 'GAS',
                 decimals: 18
             },
-            rpcUrls: ['rpc-amoy.polygon.technology'],
+            rpcUrls: ['neoxt4scan.ngd.network'],
             blockExplorerUrls: ['www.oklink.com/amoy']
         }
 
@@ -291,7 +291,7 @@ export default function Ethers({ children }) {
     }
     useEffect(() => {
         checkIfWalletIsConnect();
-        //switchToAmoyTestnet();
+        switchToAmoyTestnet();
         getContract()
     }, [address]);
     return (
